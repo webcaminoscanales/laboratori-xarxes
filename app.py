@@ -8,11 +8,17 @@ st.title("🔬 Laboratori Espacial: Xarxes de Gènere")
 
 @st.cache_data
 def carregar_dades():
-    # Provem de llegir amb punt i coma (el format habitual del teu Excel)
+    # Provem de llegir amb punt i coma (el format habitual de l'Excel)
     try:
         df = pd.read_csv("Dades_Tesi.csv", sep=";")
     except:
         df = pd.read_csv("Dades_Tesi.csv", sep=",")
+        
+    # Netejar espais, canviar comes per punts i forçar el format numèric
+    df['X'] = df['X'].astype(str).str.strip().str.replace(',', '.')
+    df['Y'] = df['Y'].astype(str).str.strip().str.replace(',', '.')
+    df['X'] = pd.to_numeric(df['X'], errors='coerce')
+    df['Y'] = pd.to_numeric(df['Y'], errors='coerce')
         
     df = df.dropna(subset=['X', 'Y', 'GENERE', 'Tipologia'])
     return df
